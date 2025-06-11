@@ -13,6 +13,8 @@ resource "aws_iam_user_policy_attachment" "student2_admin" {
 resource "aws_iam_user_login_profile" "student2_console_access" {
   user                    = aws_iam_user.student2.name
   password_reset_required = true
-  password                = "raon123!" # 초기 비밀번호 
 }
-
+# 4. password 생성
+output "password" {
+  value = aws_iam_user_login_profile.student2_console_access.password
+}
