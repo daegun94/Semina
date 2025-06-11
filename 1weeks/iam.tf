@@ -17,4 +17,5 @@ resource "aws_iam_user_login_profile" "student2_console_access" {
 # 4. password 생성
 output "password" {
   value = aws_iam_user_login_profile.student2_console_access.password
+  sensitive = true
 }
