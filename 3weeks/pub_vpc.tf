@@ -50,7 +50,6 @@ resource "aws_subnet" "test_subnet_public_d" {
 
 # Internet Gateway 생성
 resource "aws_internet_gateway" "test_igw" {
-  vpc_id = aws_vpc.test_vpc.id
 
   tags = {
     Name = "test-igw"
@@ -60,11 +59,6 @@ resource "aws_internet_gateway" "test_igw" {
 # 라우팅 테이블 생성
 resource "aws_route_table" "test_public_rtb" {
   vpc_id = aws_vpc.test_vpc.id
-
-  route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.test_igw.id
-  }
 
   tags = {
     Name = "test-vpc-public-rtb"
