@@ -70,3 +70,9 @@ resource "aws_route" "private_nat_route" {
   destination_cidr_block = "0.0.0.0/0"
   nat_gateway_id         = aws_nat_gateway.nat.id
 }
+
+resource "aws_route_table_association" "test_priv_rtb_assoc_a" {
+  subnet_id      = aws_subnet.test_subnet_priv_a.id
+  route_table_id = aws_route_table.test_private_rt.id
+}
+
