@@ -1,3 +1,29 @@
+resource "aws_iam_role" "ssm_role" {
+  name = "ssm_role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [{
+      Effect = "Allow",
+      Principal = {
+        Service = "ec2.amazonaws.com"
+      },
+      Action = "sts:AssumeRole"
+    }]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "ssm_core_policy" {
+  role       = aws_iam_role.ssm_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+}
+
+resource "aws_iam_instance_profile" "ssm_instance_profile" {
+  name = "ssm_instance_profile"
+  role = aws_iam_role.ssm_role.name
+}
+
+
 resource "aws_security_group" "any" {
   name        = "any"
   description = "Allow all inbound and outbound traffic"
@@ -29,14 +55,17 @@ resource "aws_instance" "priv" {
   vpc_security_group_ids      = [aws_security_group.any.id]
   associate_public_ip_address = false
 
+  iam_instance_profile        = aws_iam_instance_profile.ssm_instance_profile.name
+
   credit_specification {
     cpu_credits = "standard"  
   }
 
+
   tags = {
     Name = "priv"
   }
-  depends_on = [aws_eip.nat_eip]
+  
 }
 
 resource "aws_instance" "pub" {
