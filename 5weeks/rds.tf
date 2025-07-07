@@ -40,7 +40,7 @@ resource "aws_db_instance" "db_instance" {
   username               = "admin"
   password               = "Raon1234"
   db_subnet_group_name   = aws_db_subnet_group.subnet_group.name
-  vpc_security_group_ids = [aws_security_group.rds_security_group.id]
+  vpc_security_group_ids = [aws_security_group.any.id]
   
   skip_final_snapshot   = true
   depends_on = [
