@@ -15,7 +15,7 @@ resource "aws_security_group" "rds_security_group" {
 }
 
 resource "aws_db_parameter_group" "parameter_group" {
-  name   = "test_mariadb_parameter_group"
+  name   = "mariadb-parameter-group"
   family = "mariadb11.4"
 }
 
