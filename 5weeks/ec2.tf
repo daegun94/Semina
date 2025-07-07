@@ -18,6 +18,11 @@ resource "aws_iam_role_policy_attachment" "ssm_core_policy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
 
+resource "aws_iam_role_policy_attachment" "s3_full_policy" {
+  role       = aws_iam_role.ssm_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
+}
+
 resource "aws_iam_instance_profile" "ssm_instance_profile" {
   name = "ssm_instance_profile"
   role = aws_iam_role.ssm_role.name
@@ -65,6 +70,14 @@ resource "aws_instance" "priv" {
   tags = {
     Name = "priv"
   }
+
+  user_data = base64encode(local.priv_bootstrap_script)
+  
+  lifecycle {
+    ignore_changes = [
+      user_data
+    ]
+  }
   
 }
 
@@ -82,5 +95,39 @@ resource "aws_instance" "pub" {
   tags = {
     Name = "pub"
   }
+
+  user_data = base64encode(local.pub_bootstrap_script)
+  
+  lifecycle {
+    ignore_changes = [
+      user_data
+    ]
+  }
+
 }
+
+locals {
+  pub_bootstrap_script = <<EOF
+#!/bin/bash -l
+set -ex
+exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 
+yum install nginx -y
+aws s3 cp s3://gun-semina/nginx.conf /etc/nginx/nginx.conf
+systemctl restart nginx
+systemctl enable nginx
+EOF
+}
+
+locals {
+  priv_bootstrap_script = <<EOF
+#!/bin/bash -l
+set -ex
+exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 
+yum install -y java-17-amazon-corretto
+aws s3 cp s3://gun-semina/test.jar ./test.jar
+aws s3 cp s3://gun-semina/application.yaml ./application.yaml
+java -jar test.jar --spring.config.location=file:./application.yaml
+EOF
+}
+
 
