@@ -92,6 +92,8 @@ resource "aws_instance" "pub" {
   vpc_security_group_ids      = [aws_security_group.any.id]
   associate_public_ip_address = true
 
+  iam_instance_profile        = aws_iam_instance_profile.ssm_instance_profile.name
+
   credit_specification {
     cpu_credits = "standard"  
   }
