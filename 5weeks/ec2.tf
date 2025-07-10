@@ -78,6 +78,10 @@ resource "aws_instance" "priv" {
       user_data
     ]
   }
+
+  depends_on = [
+    aws_nat_gateway.nat
+  ]
   
 }
 
@@ -103,6 +107,10 @@ resource "aws_instance" "pub" {
       user_data
     ]
   }
+
+  depends_on = [
+    aws_nat_gateway.nat
+  ]
 
 }
 
