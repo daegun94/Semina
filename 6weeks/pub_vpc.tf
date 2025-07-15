@@ -76,3 +76,18 @@ resource "aws_route_table_association" "test_public_rtb_assoc_a" {
   subnet_id      = aws_subnet.test_subnet_public_a.id
   route_table_id = aws_route_table.test_public_rtb.id
 }
+
+resource "aws_route_table_association" "test_public_rtb_assoc_b" {
+  subnet_id      = aws_subnet.test_subnet_public_b.id
+  route_table_id = aws_route_table.test_public_rtb.id
+}
+
+resource "aws_route_table_association" "test_public_rtb_assoc_c" {
+  subnet_id      = aws_subnet.test_subnet_public_c.id
+  route_table_id = aws_route_table.test_public_rtb.id
+}
+
+resource "aws_route_table_association" "test_public_rtb_assoc_d" {
+  subnet_id      = aws_subnet.test_subnet_public_d.id
+  route_table_id = aws_route_table.test_public_rtb.id
+}
