@@ -23,10 +23,10 @@ resource "aws_iam_role_policy_attachment" "s3_full_policy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
 }
 
-# resource "aws_iam_instance_profile" "ssm_instance_profile" {
-#   name = "ssm_instance_profile"
-#   role = aws_iam_role.ssm_role.name
-# }
+resource "aws_iam_instance_profile" "ssm_instance_profile" {
+  name = "ssm_instance_profile"
+  role = aws_iam_role.ssm_role.name
+}
 
 
 resource "aws_security_group" "any" {
